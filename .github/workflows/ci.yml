@@ -20,6 +20,9 @@ jobs:
         java-version: '11'
         distribution: 'adopt'
 
+    - name: Install Gradle
+      run: sudo apt-get install -y gradle
+
     - name: 生成 build.gradle 文件
       run: |
         echo "plugins {" > build.gradle
@@ -40,6 +43,19 @@ jobs:
         echo "test {" >> build.gradle
         echo "    useJUnit()" >> build.gradle
         echo "}" >> build.gradle
+
+# - name: Build with Gradle
+#       run: gradle build -Dfile.encoding=UTF-8
+
+#     - name: Run tests
+#       run: gradle test
+
+#     - name: Archive test results
+#       if: always()
+#       uses: actions/upload-artifact@v2
+#       with:
+#         name: test-report
+#         path: build/reports/tests/test/
 
     - name: 安装 Gradle
       uses: gradle/gradle-build-action@v2
