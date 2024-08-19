@@ -1,32 +1,33 @@
 name: Java CI
 
-on: [push, pull_request]
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      LANG: C.UTF-8
-      LC_ALL: C.UTF-8
 
     steps:
-    - name: Checkout repository
+    - name: 检出代码
       uses: actions/checkout@v2
 
-    - name: Set up JDK 11
-      uses: actions/setup-java@v3
+    - name: 设置 JDK 11
+      uses: actions/setup-java@v2
       with:
         java-version: '11'
-        distribution: 'temurin'
-        
-    - name: Install Gradle
-      run: sudo apt-get install -y gradle
+        distribution: 'adopt'
 
-    - name: Create build.gradle
+    - name: 生成 build.gradle 文件
       run: |
         echo "plugins {" > build.gradle
         echo "    id 'java'" >> build.gradle
         echo "}" >> build.gradle
+        echo "" >> build.gradle
+        echo "group 'com.example'" >> build.gradle
+        echo "version '1.0-SNAPSHOT'" >> build.gradle
         echo "" >> build.gradle
         echo "repositories {" >> build.gradle
         echo "    mavenCentral()" >> build.gradle
@@ -35,19 +36,80 @@ jobs:
         echo "dependencies {" >> build.gradle
         echo "    testImplementation 'junit:junit:4.13.2'" >> build.gradle
         echo "}" >> build.gradle
+        echo "" >> build.gradle
+        echo "test {" >> build.gradle
+        echo "    useJUnit()" >> build.gradle
+        echo "}" >> build.gradle
 
-    - name: Build with Gradle
-      run: gradle build -Dfile.encoding=UTF-8
+    - name: 安装 Gradle
+      uses: gradle/gradle-build-action@v2
+      with:
+        gradle-version: '7.0'  
 
-    - name: Run tests
-      run: gradle test
+    - name: 构建项目并运行测试
+      run: ./gradlew build
 
-    - name: Archive test results
+    - name: 运行测试
+      run: ./gradlew test
+
+    - name: 归档测试报告
       if: always()
       uses: actions/upload-artifact@v2
       with:
         name: test-report
         path: build/reports/tests/test/
+
+# helloworld
+# name: Java CI
+
+# on: [push, pull_request]
+
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+#     env:
+#       LANG: C.UTF-8
+#       LC_ALL: C.UTF-8
+
+#     steps:
+#     - name: Checkout repository
+#       uses: actions/checkout@v2
+
+#     - name: Set up JDK 11
+#       uses: actions/setup-java@v3
+#       with:
+#         java-version: '11'
+#         distribution: 'temurin'
+        
+#     - name: Install Gradle
+#       run: sudo apt-get install -y gradle
+
+#     - name: Create build.gradle
+#       run: |
+#         echo "plugins {" > build.gradle
+#         echo "    id 'java'" >> build.gradle
+#         echo "}" >> build.gradle
+#         echo "" >> build.gradle
+#         echo "repositories {" >> build.gradle
+#         echo "    mavenCentral()" >> build.gradle
+#         echo "}" >> build.gradle
+#         echo "" >> build.gradle
+#         echo "dependencies {" >> build.gradle
+#         echo "    testImplementation 'junit:junit:4.13.2'" >> build.gradle
+#         echo "}" >> build.gradle
+
+#     - name: Build with Gradle
+#       run: gradle build -Dfile.encoding=UTF-8
+
+#     - name: Run tests
+#       run: gradle test
+
+#     - name: Archive test results
+#       if: always()
+#       uses: actions/upload-artifact@v2
+#       with:
+#         name: test-report
+#         path: build/reports/tests/test/
 
 
 
