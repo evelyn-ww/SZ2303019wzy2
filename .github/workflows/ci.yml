@@ -44,36 +44,36 @@ jobs:
         echo "    useJUnit()" >> build.gradle
         echo "}" >> build.gradle
 
-# - name: Build with Gradle
-#       run: gradle build -Dfile.encoding=UTF-8
+    - name: Build with Gradle
+          run: gradle build -Dfile.encoding=UTF-8
 
-#     - name: Run tests
-#       run: gradle test
+        - name: Run tests
+          run: gradle test
 
-#     - name: Archive test results
-#       if: always()
-#       uses: actions/upload-artifact@v2
-#       with:
-#         name: test-report
-#         path: build/reports/tests/test/
+        - name: Archive test results
+          if: always()
+          uses: actions/upload-artifact@v2
+          with:
+            name: test-report
+            path: build/reports/tests/test/
 
-    - name: 安装 Gradle
-      uses: gradle/gradle-build-action@v2
-      with:
-        gradle-version: '7.0'  
+    # - name: 安装 Gradle
+    #   uses: gradle/gradle-build-action@v2
+    #   with:
+    #     gradle-version: '7.0'  
 
-    - name: 构建项目并运行测试
-      run: ./gradlew build
+    # - name: 构建项目并运行测试
+    #   run: ./gradlew build
 
-    - name: 运行测试
-      run: ./gradlew test
+    # - name: 运行测试
+    #   run: ./gradlew test
 
-    - name: 归档测试报告
-      if: always()
-      uses: actions/upload-artifact@v2
-      with:
-        name: test-report
-        path: build/reports/tests/test/
+    # - name: 归档测试报告
+    #   if: always()
+    #   uses: actions/upload-artifact@v2
+    #   with:
+    #     name: test-report
+    #     path: build/reports/tests/test/
 
 # helloworld
 # name: Java CI
